@@ -1,0 +1,40 @@
+Bootstrap: docker
+From: rocker/tidyverse:4.5.1
+
+%labels
+
+    AUTHOR mark.robinson@mls.uzh.ch
+
+%post
+
+    # Install python3.12
+    apt-get update
+    apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev \
+        libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev python-is-python3 git \
+        libgsl-dev
+
+    wget https://www.python.org/ftp/python/3.10.18/Python-3.10.18.tgz
+    tar -xf Python-3.10.18.tgz
+    cd Python-3.10.*/
+    ./configure --enable-optimizations
+    make -j 4
+    make altinstall
+
+    # virtualenv
+    cd /opt
+    python3.10 -m venv "default"
+    . default/bin/activate
+
+    pip install umap-learn==0.5.8
+
+    ## no versioning here - fcps deps
+    Rscript -e 'install.packages("BiocManager")'
+    Rscript -e 'BiocManager::install(c("scDesign3","SingleCellExperiment","readr","rmarkdown","Seurat","dplyr","GEOquery","R.utils", "here", "markdown","remotes","distances","harmony","Rfast","densvis","batchelor","glmGamPoi"))'
+    Rscript -e 'BiocManager::install("miraisolutions/godmode")'
+    Rscript -e 'BiocManager::install("satijalab/seurat-wrappers")'
+
+    echo '. /opt/default/bin/activate' >> $SINGULARITY_ENVIRONMENT
+
+%environment
+    
+    . /opt/default/bin/activate
