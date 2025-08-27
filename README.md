@@ -7,10 +7,10 @@ TODO: add some docs here to this page to highlight how all the arguments are han
 The script will have arguments as follows:
 
 ```
---what     - specifies which operation will be performed (rawdata, simulation, normalization, 
---flavour  - which data/method/metric is run
+--what     - specifies which operation will be performed (normalization, visualization, etc.) 
+--flavour  - which data/method/metric is run (conditional on 'what')
 --params   - additional parameters that are optionally needed
---verbose  - whether some aspects of the output are suppressed (default: FALSE)
+--verbose  - whether aspects of the output are not suppressed (default: TRUE)
 ```
 
-The idea is also that the script will source some R scripts in the `utils` directory, one for each `what` specified, containing the relevant code for the `flavour` of interest.
+The idea is also that the script will source some R scripts in the `utils` directory of the repo, one for each `what` specified (i.e. `file.path("utils", paste0(args$what, "_utils.R"))`, containing the relevant code for the `flavour` of interest.
