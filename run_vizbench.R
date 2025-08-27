@@ -7,7 +7,7 @@
 
 ## Usage:
 ## to do a system call to showcase how to call other subscripts
-##    Rscript thisfilename.R --what type --routine specific-module
+##    Rscript thisfilename.R --what type --flavour specific-module
 
 library(argparse)
 
@@ -27,7 +27,7 @@ parser$add_argument("--what",
 # subparsers = parser.add_subparsers (Python)
 # see https://stackoverflow.com/questions/9505898/conditional-command-line-arguments-in-python-using-argparse
 
-parser$add_argument("--routine", choices = c("mouse_pancreas", "scdesign3"),
+parser$add_argument("--flavour", choices = c("mouse_pancreas", "scdesign3"),
                     required = TRUE, help = "Module to run: name depends on the 'what'")
 
 parser$add_argument("--params", type = "character", default = "",
@@ -38,7 +38,7 @@ parser$add_argument("--verbose", type = "logical", default = TRUE,
 
 args <- parser$parse_args()
 cat("Selected category: ", args$what, "\n")
-cat("Routine selected: ", args$routine, "\n")
+cat("Routine selected: ", args$flavour, "\n")
 cat("Additional parameters: ", args$params, "\n")
 cat("Verbose: ", args$verbose, "\n")
 
@@ -53,7 +53,7 @@ if( file.exists(helpers) ) {
 }
 
 # check if implemented: throw error if not; run if so
-fun <- tryCatch(get(args$routine), error = function(e) e)
+fun <- tryCatch(get(args$flavour), error = function(e) e)
 if ( !("error" %in% class(fun)) ) {
     x <- fun(args) # execute function
     print(x)
