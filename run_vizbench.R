@@ -2,7 +2,7 @@
 
 ## Originally sketched by Izaskun Mallona
 ## modified/populated by Mark Robinson
-## various chunks of code from Zhiqian Zhai and Qingyang Wang
+## various chunks of code from Zhiqian Zhai and Qingyang Wang will be linked
 ## from original repo: https://github.com/zhiqianZ/Benchmark-Normalization-Integration-Visualization
 
 ## Usage:
