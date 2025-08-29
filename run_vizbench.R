@@ -36,6 +36,12 @@ parser$add_argument("--params", type = "character", default = "",
 parser$add_argument("--verbose", type = "logical", default = TRUE,
                     help = "Optional parameters as free-form text")
 
+parser$add_argument("--output_dir", "-o", dest="output_dir", type="character",
+                    help="output directory where files will be saved", default=getwd(),
+                    required = TRUE)
+parser$add_argument("--name", "-n", dest="name", type="character", required = TRUE,
+                    help="name of the dataset")
+
 args <- parser$parse_args()
 cat("Selected category: ", args$what, "\n")
 cat("Routine selected: ", args$flavour, "\n")
