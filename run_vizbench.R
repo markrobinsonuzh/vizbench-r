@@ -42,16 +42,21 @@ parser$add_argument("--output_dir", "-o", dest="output_dir", type="character",
 parser$add_argument("--name", "-n", dest="name", type="character", required = TRUE,
                     help="name of the dataset")
 
+# send details to be logged
 args <- parser$parse_args()
 message("Selected category: ", args$what)
 message("Routine selected: ", args$flavour)
 message("Additional parameters: ", args$params)
 message("Verbose: ", args$verbose)
 
+# infer the current directory
 cargs <- commandArgs(trailingOnly = FALSE)
 m <- grep("--file=", cargs)
 run_dir <- dirname( gsub("--file=","",cargs[[m]]) )
 message("location: ", run_dir)
+message("libPaths: ", paste0(.libPaths(),collapse=";"))
+info <- Sys.info()
+message("info: ", paste0(names(info),"=",info,collapse=";"))
 
 # source helper functions
 helpers <- file.path(run_dir, "utils", paste0(args$what, "_utils.R"))
