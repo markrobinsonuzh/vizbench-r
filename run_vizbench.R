@@ -43,10 +43,10 @@ parser$add_argument("--name", "-n", dest="name", type="character", required = TR
                     help="name of the dataset")
 
 args <- parser$parse_args()
-cat("Selected category: ", args$what, "\n")
-cat("Routine selected: ", args$flavour, "\n")
-cat("Additional parameters: ", args$params, "\n")
-cat("Verbose: ", args$verbose, "\n")
+message("Selected category: ", args$what, "\n")
+message("Routine selected: ", args$flavour, "\n")
+message("Additional parameters: ", args$params, "\n")
+message("Verbose: ", args$verbose, "\n")
 
 # source helper functions
 helpers <- file.path("utils", paste0(args$what, "_utils.R"))
