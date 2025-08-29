@@ -75,7 +75,10 @@ if (args$what == 'rawdata') {
     #     outputs:
     #   - id: rawdata.sce
     #    path: "{input}/{stage}/{module}/{params}/{dataset}.sce.rds"
-    saveRDS(obj, file.path(args$output_dir, paste0(args$name,".sce.rds")))
+    out_fn <- file.path(args$output_dir, paste0(args$name,".sce.rds"))
+    message(paste0("Writing to ", out_fn, " .."))
+    saveRDS(obj, out_fn)
+    message("Done.")
 } else if (args$what == 'simulation') {
     # 'x' is something here
 } else if (args$what == 'simulation') {
