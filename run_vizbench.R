@@ -70,8 +70,12 @@ if ( !("error" %in% class(fun)) ) {
 
 if (args$what == 'rawdata') {
     # 'x' should be a SingleCellExperiment object
-    # write it out in non-proprietary format
-    message("do something with sce object.\n")
+    # TODO: write it out in non-proprietary format?
+    # try to match this:
+    #     outputs:
+    #   - id: rawdata.sce
+    #    path: "{input}/{stage}/{module}/{params}/{dataset}.sce.rds"
+    saveRDS(sce, file.path(args$output_dir, paste0("args$name",".sce.rds")))
 } else if (args$what == 'simulation') {
     # 'x' is something here
 } else if (args$what == 'simulation') {
