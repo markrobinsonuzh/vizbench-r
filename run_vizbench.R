@@ -43,10 +43,10 @@ parser$add_argument("--name", "-n", dest="name", type="character", required = TR
                     help="name of the dataset")
 
 args <- parser$parse_args()
-message("Selected category: ", args$what, "\n")
-message("Routine selected: ", args$flavour, "\n")
-message("Additional parameters: ", args$params, "\n")
-message("Verbose: ", args$verbose, "\n")
+message("Selected category: ", args$what)
+message("Routine selected: ", args$flavour)
+message("Additional parameters: ", args$params)
+message("Verbose: ", args$verbose)
 
 # source helper functions
 helpers <- file.path("utils", paste0(args$what, "_utils.R"))
@@ -54,7 +54,7 @@ if( file.exists(helpers) ) {
     message("Sourcing .. ", helpers)
     source(helpers)
 } else {
-    message("Helper code not available. Exiting.")
+    message(paste0("Helper code in ",helpers," not found. Exiting."))
     quit("no", status = 1)
 }
 
