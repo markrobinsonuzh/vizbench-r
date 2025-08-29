@@ -59,7 +59,7 @@ if( file.exists(helpers) ) {
 }
 
 # check if implemented: throw error if not; run if so
-fun <- tryCatch(get(args$flavour), error = function(e) e)
+fun <- tryCatch(obj <- get(args$flavour), error = function(e) e)
 if ( !("error" %in% class(fun)) ) {
     x <- fun(args) # execute function
     print(x)
@@ -75,7 +75,7 @@ if (args$what == 'rawdata') {
     #     outputs:
     #   - id: rawdata.sce
     #    path: "{input}/{stage}/{module}/{params}/{dataset}.sce.rds"
-    saveRDS(sce, file.path(args$output_dir, paste0("args$name",".sce.rds")))
+    saveRDS(obj, file.path(args$output_dir, paste0(args$name,".sce.rds")))
 } else if (args$what == 'simulation') {
     # 'x' is something here
 } else if (args$what == 'simulation') {
