@@ -49,10 +49,12 @@ message("Additional parameters: ", args$params)
 message("Verbose: ", args$verbose)
 
 cargs <- commandArgs(trailingOnly = FALSE)
-message("all args: ", paste0( names(cargs), "=", unlist(cargs), collapse=";" ))
+m <- grep("--file=", cargs)
+run_dir <- dirname( gsub("--file=","",cargs[[m]]) )
+message("location: ", run_dir)
 
 # source helper functions
-helpers <- file.path("utils", paste0(args$what, "_utils.R"))
+helpers <- file.path(run_dir, "utils", paste0(args$what, "_utils.R"))
 if( file.exists(helpers) ) {
     message("Sourcing .. ", helpers)
     source(helpers)
