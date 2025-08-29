@@ -48,6 +48,9 @@ message("Routine selected: ", args$flavour)
 message("Additional parameters: ", args$params)
 message("Verbose: ", args$verbose)
 
+cargs <- commandArgs(trailingOnly = FALSE)
+message("all args: ", paste0( names(cargs), "=", unlist(cargs), collapse=";" ))
+
 # source helper functions
 helpers <- file.path("utils", paste0(args$what, "_utils.R"))
 if( file.exists(helpers) ) {
