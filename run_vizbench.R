@@ -18,14 +18,11 @@ parser$add_argument("--what",
                     choices = c("rawdata", "simulation"),
                     # choices = c("rawdata", "simulation", "normalization", "integration", "metric"), 
                     required = TRUE, 
-                    help = "Module type: rawdata, simulation, normalizaiton, integration, viz, metric")
+                    help = "Module type: rawdata, simulation, normalization, integration, viz, metric")
 
 #s <- switch(args$what, rawdata = c("mouse_pancreas"),
 #                       simulation = c("scdesign3"))
-#cat(s, "\n")
-# TODO: add subparser via 
-# subparsers = parser.add_subparsers (Python)
-# see https://stackoverflow.com/questions/9505898/conditional-command-line-arguments-in-python-using-argparse
+# TODO: add subparser
 
 parser$add_argument("--flavour", choices = c("mouse_pancreas", "scdesign3"),
                     required = TRUE, help = "Module to run: name depends on the 'what'")
@@ -61,7 +58,7 @@ if( file.exists(helpers) ) {
 # check if implemented: throw error if not; run if so
 fun <- tryCatch(get(args$flavour), error = function(e) e)
 if ( !("error" %in% class(fun)) ) {
-    x <- fun(args) # execute function
+    x <- fun(args) # execute function 
     print(x)
 } else {
     message('Unimplemented functionality. Exiting.\n') # throw error?
@@ -70,8 +67,10 @@ if ( !("error" %in% class(fun)) ) {
 
 if (args$what == 'rawdata') {
     # 'x' should be a SingleCellExperiment object
-    # write it out in non-proprietary format
-    message("do something with sce object.\n")
+  fn <- file.path(args$output_dir, paste0(args$flavour, ".ad"))
+  message(paste("Converting SCE -> AnnData. Writing: ", fn, "\n"))
+  x.ad <- as_AnnData(x)
+  write_h5ad(x.ad, fn, compression = "gzip")
 } else if (args$what == 'simulation') {
     # 'x' is something here
 } else if (args$what == 'simulation') {

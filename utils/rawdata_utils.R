@@ -7,6 +7,7 @@ load_pkgs <- function() {
   library(GEOquery)
   library(R.utils)
   library(here)
+  library(anndataR)
 }
 
 if(args$verbose) {
