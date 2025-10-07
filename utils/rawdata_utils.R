@@ -16,8 +16,8 @@ mouse_pancreas <- function(args) {
   data = lapply(1:2, function(x) {
     tmpdir <- tempdir()
     getGEOSuppFiles(file[x], baseDir = tmpdir)
-    curr_data = read.csv(file.path(tmpdir, file[x], "/", file[x],
-                                   "_mouse",x,"_umifm_counts.csv.gz"))
+    curr_data = read.csv(file.path(tmpdir, file[x],
+				  paste0(file[x],"_mouse",x,"_umifm_counts.csv.gz")))
     return(curr_data)
   })
   
