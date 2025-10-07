@@ -74,7 +74,8 @@ if( file.exists(helpers) ) {
 }
 
 # load packages
-if(args$verbose) load_pkgs() else suppressPackageStartupMessages(load_pkgs())
+suppressPackageStartupMessages(load_pkgs())
+#if(args$verbose) load_pkgs() else suppressPackageStartupMessages(load_pkgs())
 
 # check if implemented: throw error if not; run if so
 fun <- tryCatch(obj <- get(args$flavour), error = function(e) e)

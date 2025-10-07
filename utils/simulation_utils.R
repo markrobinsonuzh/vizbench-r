@@ -8,7 +8,10 @@ load_pkgs <- function() {
 }
 
 
-simulation <- function(args) {
+## NOTE: code below uses 40 cores!!
+
+
+scdesign3 <- function(args) {
   
   sce <- read_h5ad(args$rawdata.ad, as = "SingleCellExperiment")
   data = counts(sce)
@@ -16,7 +19,6 @@ simulation <- function(args) {
   
   # QC
   batch = unique(coldat$batch)
-  unique(coldat$celltype)
   meta = data.frame(cbind(celltype=as.character(coldat$celltype),
                           batch=as.character(coldat$batch)))
   batch_filtered = colnames(table(meta))[which(table(meta)<5&table(meta)>0, arr.ind = T)[,2]]
@@ -40,11 +42,11 @@ simulation <- function(args) {
   hvg = VariableFeatures(seurat)
   
   data = data[hvg,]
-  print(dim(data))
+  if(args$verbose) message(paste0(dim(data), collapse=","))
   ## scDesign3
   sce <- SingleCellExperiment(assay = list(counts = data), 
                               colData = coldat)
-  
+
   set.seed(123)
   data <- construct_data(
     sce = sce,
@@ -54,11 +56,12 @@ simulation <- function(args) {
     spatial = NULL,
     other_covariates = "batch",
     corr_by = "celltype",
-    ncell = 200000
+    ncell = 30000
+    #ncell = 100000
   )
   
-  mean(data$count_mat>0)
-  dim(data$count_mat)
+  if(args$verbose) message(mean(data$count_mat>0))
+  if(args$verbose) message(paste0(dim(data$count_mat), collapse=","))
   
   marginal <- fit_marginal(
     data = data,
@@ -73,10 +76,6 @@ simulation <- function(args) {
     # parallelization = "pbmcmapply",
     trace = TRUE
   )
-  
-  length(marginal)
-  class(marginal)
-  
   
   copula <- fit_copula(
     sce = sce,
@@ -103,6 +102,8 @@ simulation <- function(args) {
   # dir.create(file.path(base_dir, "Data/Simulation"))
   # dir.create(file.path(base_dir, "Data/Simulation/Pilot"))
   # saveRDS(para,file.path(base_dir, "Data/Simulation/Pilot/MousePancreas_para.rds"))
+
+  if(args$verbose) message(paste0(names(data), collapse=","))
   
   set.seed(123)
   newcounts = simu_new(
@@ -113,31 +114,16 @@ simulation <- function(args) {
     zero_mat = para$zero_mat,
     quantile_mat = NULL,
     copula_list = copula$copula_list,
-    n_cores = 10,
+    n_cores = 40,
     family_use = "nb",
     input_data = data$dat,
     new_covariate = data$newCovariate,
     important_feature = copula$important_feature,
     parallelization = "pbmcmapply"
   )
-  
-  counts = data$counts
-  meta = data$meta[,c("celltype","batch")]
-  
-  # MR: take a subset
-  set.seed(1001)
-  nc <- ncol(counts)
-  s <- sample(nc, round(.20*nc), replace = FALSE)
-  counts <- counts[,s]
-  meta <- meta[s,]
-  
-  with(meta, table(celltype, batch))
-  
-  rm(data)
-  rownames(meta) = colnames(counts)
-  seurat.obj = CreateSeuratObject(counts, meta.data=meta)
-  rm(counts, meta); gc()
 
+  seurat.obj = CreateSeuratObject(newcounts, 
+				  meta.data=data$newCovariate)
   return(seurat.obj)
 }
 
