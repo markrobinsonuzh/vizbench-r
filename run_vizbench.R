@@ -15,7 +15,7 @@ parser <- ArgumentParser(description = "Benchmarking entrypoint")
 
 # define arguments
 parser$add_argument("--what", 
-                    choices = c("rawdata", "simulation"),
+                    choices = c("rawdata", "simulation", "normalization"),
                     # choices = c("rawdata", "simulation", "normalization", "integration", "metric"), 
                     required = TRUE, 
                     help = "Module type: rawdata, simulation, normalization, integration, viz, metric")
@@ -24,24 +24,32 @@ parser$add_argument("--what",
 #                       simulation = c("scdesign3"))
 # TODO: add subparser
 
-parser$add_argument("--flavour", choices = c("mouse_pancreas", "scdesign3"),
+parser$add_argument("--flavour", 
+                    choices = c("mouse_pancreas",                         # raw data
+                                "scdesign3",                              # simulation
+                                "log1pCP10k", "log1pCPM", "sctransform"), # normalization
                     required = TRUE, help = "Module to run: name depends on the 'what'")
 
 parser$add_argument("--params", type = "character", default = "",
                     help = "Optional parameters as free-form text")
 
 parser$add_argument("--verbose", type = "logical", default = TRUE,
-                    help = "Optional parameters as free-form text")
+                    help = "TRUE/FALSE as to whether to write progress to stdout")
 
 parser$add_argument("--output_dir", "-o", dest="output_dir", type="character",
                     help="output directory where files will be saved", default=getwd(),
                     required = TRUE)
+
 parser$add_argument("--name", "-n", dest="name", type="character", required = TRUE,
                     help="name of the dataset")
 
 parser$add_argument('--rawdata.ad',
                     type="character",
-                    help='gz-compressed H5 file containing data as AnnData')
+                    help='gz-compressed H5 file containing (raw) data as AnnData')
+
+parser$add_argument('--simdata.ad',
+                    type="character",
+                    help='gz-compressed H5 file containing (simulated) data as AnnData')
 # parser$add_argument('--data.true_labels',
 #                     type="character",
 #                     help='gz-compressed textfile with the true labels; used to select a range of ks.')
@@ -88,24 +96,21 @@ if ( !("error" %in% class(fun)) ) {
     quit("no", status = 1)
 }
 
-if (args$what == 'rawdata') {
-  # 'x' should be a SingleCellExperiment object
-  fn <- file.path(args$output_dir, paste0(args$name, ".ad"))
-  message(paste("Converting SCE -> AnnData."))
+write_ad <- function(x, file) {
+  if(args$verbose) message(paste("Converting", class(x), "-> AnnData."))
   x.ad <- as_AnnData(x)
-  message(paste0("Writing: ", fn, "."))
+  if(args$verbose) message(paste0("Writing: ", file, "."))
   write_h5ad(x.ad, fn, mode = "w", compression = "gzip")
-  message("Done.")
-} else if (args$what == 'simulation') {
+  if(args$verbose) message("Done.")
+}
+
+# write to AnnData via anndataR
+if (args$what %in% c("rawdata", "simulation", "normalization", "integration")) {
+  # here, always writing data files as AD (HDF5)
   fn <- file.path(args$output_dir, paste0(args$name, ".ad"))
-  message(paste("Converting Seurat -> AnnData."))
-  x.ad <- as_AnnData(x)
-  message(paste0("Writing: ", fn, "."))
-  write_h5ad(x.ad, fn, mode = "w", compression = "gzip")
-  message("Done.")
-  # 'x' should be a Seurat object now
-} else if (args$what == 'method') {
-    # 'x' is something here
-} else if (args$what == 'metric') {
+  write_ad(x, fn)
+} else if (args$what == "visualization") {
+  # 'x' is something here
+} else if (args$what == "metric") {
     # 'x' is something here
 }
