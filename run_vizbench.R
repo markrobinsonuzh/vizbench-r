@@ -52,6 +52,7 @@ args <- parser$parse_args()
 message("Selected category: ", args$what)
 message("Routine selected: ", args$flavour)
 message("Additional parameters: ", args$params)
+message("name: ", args$name)
 message("Verbose: ", args$verbose)
 
 # infer the current directory
