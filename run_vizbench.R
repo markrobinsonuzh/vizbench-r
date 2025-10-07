@@ -39,6 +39,14 @@ parser$add_argument("--output_dir", "-o", dest="output_dir", type="character",
 parser$add_argument("--name", "-n", dest="name", type="character", required = TRUE,
                     help="name of the dataset")
 
+parser$add_argument('--rawdata.ad',
+                    type="character",
+                    help='gz-compressed H5 file containing data as AnnData')
+# parser$add_argument('--data.true_labels',
+#                     type="character",
+#                     help='gz-compressed textfile with the true labels; used to select a range of ks.')
+
+
 # send details to be logged
 args <- parser$parse_args()
 message("Selected category: ", args$what)
@@ -65,6 +73,9 @@ if( file.exists(helpers) ) {
     quit("no", status = 1)
 }
 
+# load packages
+if(args$verbose) load_pkgs() else suppressPackageStartupMessages(load_pkgs())
+
 # check if implemented: throw error if not; run if so
 fun <- tryCatch(obj <- get(args$flavour), error = function(e) e)
 if ( !("error" %in% class(fun)) ) {
@@ -84,8 +95,14 @@ if (args$what == 'rawdata') {
   write_h5ad(x.ad, fn, mode = "w", compression = "gzip")
   message("Done.")
 } else if (args$what == 'simulation') {
-    # 'x' is something here
-} else if (args$what == 'simulation') {
+  fn <- file.path(args$output_dir, paste0(args$flavour, ".ad"))
+  message(paste("Converting Seurat -> AnnData."))
+  x.ad <- as_AnnData(x)
+  message(paste0("Writing: ", fn, "."))
+  write_h5ad(x.ad, fn, mode = "w", compression = "gzip")
+  message("Done.")
+  # 'x' should be a Seurat object now
+} else if (args$what == 'method') {
     # 'x' is something here
 } else if (args$what == 'metric') {
     # 'x' is something here

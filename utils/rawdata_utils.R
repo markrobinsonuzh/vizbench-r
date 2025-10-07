@@ -10,18 +10,14 @@ load_pkgs <- function() {
   library(anndataR)
 }
 
-if(args$verbose) {
-  load_pkgs()
-} else {
-  suppressPackageStartupMessages(load_pkgs())
-}
-
 mouse_pancreas <- function(args) {
   ### Mouse pancreas GSM2230761 GSM2230762 (pilot)
   file = c("GSM2230761", "GSM2230762")
-  data = lapply(1:2, function(x){
-    getGEOSuppFiles(file[x])
-    curr_data = read.csv(paste0(file[x],"/",file[x],"_mouse",x,"_umifm_counts.csv.gz"))
+  data = lapply(1:2, function(x) {
+    tmpdir <- tempdir()
+    getGEOSuppFiles(file[x], baseDir = tmpdir)
+    curr_data = read.csv(file.path(tmpdir, file[x], "/", file[x],
+                                   "_mouse",x,"_umifm_counts.csv.gz"))
     return(curr_data)
   })
   
@@ -32,12 +28,9 @@ mouse_pancreas <- function(args) {
   count_mat = t(do.call("rbind", data))
   coldata = data.frame(celltype = label, batch = batch)
   rownames(coldata) = colnames(count_mat)
-  sce_save = SingleCellExperiment(list(counts = count_mat), colData = coldata)
+  sce_save = SingleCellExperiment(list(counts = count_mat), 
+                                  colData = coldata)
   return(sce_save)
-  #unique(coldata$celltype)
-  #unique(coldata$batch)
-  #sce_save
-  #saveRDS(sce_save,file.path(data_dir,"mouse_pancreas.rds"))
 }
 
 
