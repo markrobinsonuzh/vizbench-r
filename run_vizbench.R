@@ -78,10 +78,10 @@ if ( !("error" %in% class(fun)) ) {
 if (args$what == 'rawdata') {
   # 'x' should be a SingleCellExperiment object
   fn <- file.path(args$output_dir, paste0(args$flavour, ".ad"))
-  message(paste("Converting SCE -> AnnData.\n"))
+  message(paste("Converting SCE -> AnnData."))
   x.ad <- as_AnnData(x)
-  message(paste0("Writing: ", fn, "\n"))
-  write_h5ad(x.ad, fn, compression = "gzip")
+  message(paste0("Writing: ", fn, "."))
+  write_h5ad(x.ad, fn, mode = "w", compression = "gzip")
   message("Done.")
 } else if (args$what == 'simulation') {
     # 'x' is something here
