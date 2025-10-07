@@ -39,24 +39,34 @@ parser$add_argument("--output_dir", "-o", dest="output_dir", type="character",
 parser$add_argument("--name", "-n", dest="name", type="character", required = TRUE,
                     help="name of the dataset")
 
+# send details to be logged
 args <- parser$parse_args()
-cat("Selected category: ", args$what, "\n")
-cat("Routine selected: ", args$flavour, "\n")
-cat("Additional parameters: ", args$params, "\n")
-cat("Verbose: ", args$verbose, "\n")
+message("Selected category: ", args$what)
+message("Routine selected: ", args$flavour)
+message("Additional parameters: ", args$params)
+message("Verbose: ", args$verbose)
+
+# infer the current directory
+cargs <- commandArgs(trailingOnly = FALSE)
+m <- grep("--file=", cargs)
+run_dir <- dirname( gsub("--file=","",cargs[[m]]) )
+message("location: ", run_dir)
+message("libPaths: ", paste0(.libPaths(),collapse=";"))
+info <- Sys.info()
+message("info: ", paste0(names(info),"=",info,collapse=";"))
 
 # source helper functions
-helpers <- file.path("utils", paste0(args$what, "_utils.R"))
+helpers <- file.path(run_dir, "utils", paste0(args$what, "_utils.R"))
 if( file.exists(helpers) ) {
     message("Sourcing .. ", helpers)
     source(helpers)
 } else {
-    message("Helper code not available. Exiting.")
+    message(paste0("Helper code in ",helpers," not found. Exiting."))
     quit("no", status = 1)
 }
 
 # check if implemented: throw error if not; run if so
-fun <- tryCatch(get(args$flavour), error = function(e) e)
+fun <- tryCatch(obj <- get(args$flavour), error = function(e) e)
 if ( !("error" %in% class(fun)) ) {
     x <- fun(args) # execute function 
     print(x)
@@ -66,11 +76,13 @@ if ( !("error" %in% class(fun)) ) {
 }
 
 if (args$what == 'rawdata') {
-    # 'x' should be a SingleCellExperiment object
+  # 'x' should be a SingleCellExperiment object
   fn <- file.path(args$output_dir, paste0(args$flavour, ".ad"))
-  message(paste("Converting SCE -> AnnData. Writing: ", fn, "\n"))
+  message(paste("Converting SCE -> AnnData.\n"))
   x.ad <- as_AnnData(x)
+  message(paste0("Writing: ", fn, "\n"))
   write_h5ad(x.ad, fn, compression = "gzip")
+  message("Done.")
 } else if (args$what == 'simulation') {
     # 'x' is something here
 } else if (args$what == 'simulation') {
