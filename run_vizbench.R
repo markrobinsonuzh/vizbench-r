@@ -15,10 +15,10 @@ parser <- ArgumentParser(description = "Benchmarking entrypoint")
 
 # define arguments
 parser$add_argument("--what", 
-                    choices = c("rawdata", "simulation", "normalization"),
-                    # choices = c("rawdata", "simulation", "normalization", "integration", "metric"), 
+                    choices = c("rawdata", "simulate", "normalize", 
+                                "integrate", "visualize", "metric"),
                     required = TRUE, 
-                    help = "Module type: rawdata, simulation, normalization, integration, viz, metric")
+                    help = "Module type: rawdata, simulate, normalize, integrate, vizualize, metric")
 
 #s <- switch(args$what, rawdata = c("mouse_pancreas"),
 #                       simulation = c("scdesign3"))
@@ -26,9 +26,13 @@ parser$add_argument("--what",
 
 parser$add_argument("--flavour", 
                     choices = c("mouse_pancreas",                         # raw data
-                                "scdesign3",                              # simulation
-                                "log1pCP10k", "log1pCPM", "sctransform"), # normalization
-                    required = TRUE, help = "Module to run: name depends on the 'what'")
+                                "scdesign3",                              # simulate
+                                "log1pCP10k", "log1pCPM", "sctransform", # normalize
+                                "x",               # integrate
+                                "y",               # visualize
+                                "xx", "yy", "zz"), # metric
+                    required = TRUE, 
+                    help = "Module to run: name depends on the 'what'")
 
 parser$add_argument("--params", type = "character", default = "",
                     help = "Optional parameters as free-form text")
@@ -50,6 +54,7 @@ parser$add_argument('--rawdata.ad',
 parser$add_argument('--simdata.ad',
                     type="character",
                     help='gz-compressed H5 file containing (simulated) data as AnnData')
+
 # parser$add_argument('--data.true_labels',
 #                     type="character",
 #                     help='gz-compressed textfile with the true labels; used to select a range of ks.')
@@ -63,7 +68,7 @@ message("Additional parameters: ", args$params)
 message("name: ", args$name)
 message("Verbose: ", args$verbose)
 
-# infer the current directory
+# infer the current directory (useful for debugging)
 cargs <- commandArgs(trailingOnly = FALSE)
 m <- grep("--file=", cargs)
 run_dir <- dirname( gsub("--file=","",cargs[[m]]) )
@@ -72,7 +77,7 @@ message("libPaths: ", paste0(.libPaths(),collapse=";"))
 info <- Sys.info()
 message("info: ", paste0(names(info),"=",info,collapse=";"))
 
-# source helper functions
+# source helper functions (n.b.: args$what controls which code to source)
 helpers <- file.path(run_dir, "utils", paste0(args$what, "_utils.R"))
 if( file.exists(helpers) ) {
     message("Sourcing .. ", helpers)
@@ -84,9 +89,9 @@ if( file.exists(helpers) ) {
 
 # load packages
 suppressPackageStartupMessages(load_pkgs())
-#if(args$verbose) load_pkgs() else suppressPackageStartupMessages(load_pkgs())
 
 # check if implemented: throw error if not; run if so
+# n.b.: args$flavour defines what 'main' function to call
 fun <- tryCatch(obj <- get(args$flavour), error = function(e) e)
 if ( !("error" %in% class(fun)) ) {
     x <- fun(args) # execute function 
@@ -105,11 +110,11 @@ write_ad <- function(x, file) {
 }
 
 # write to AnnData via anndataR
-if (args$what %in% c("rawdata", "simulation", "normalization", "integration")) {
+if (args$what %in% c("rawdata", "simulate", "normalize", "integrate")) {
   # here, always writing data files as AD (HDF5)
   fn <- file.path(args$output_dir, paste0(args$name, ".ad"))
   write_ad(x, fn)
-} else if (args$what == "visualization") {
+} else if (args$what == "visualize") {
   # 'x' is something here
 } else if (args$what == "metric") {
     # 'x' is something here
