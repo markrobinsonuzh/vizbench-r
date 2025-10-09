@@ -1,2 +1,3 @@
 #R_LIBS=/home/mark/projects/omb/Benchmark-Normalization-Integration-Visualization/Rlibs /usr/local/R/R-4.5.1/bin/Rscript run_vizbench.R --what rawdata --flavour mouse_pancreas --output_dir . --name this --verbose FALSE
-R_LIBS=/home/mark/projects/omb/Benchmark-Normalization-Integration-Visualization/Rlibs /usr/local/R/R-4.5.1/bin/Rscript run_vizbench.R --what simulation --flavour scdesign3 --rawdata.ad mouse_pancreas.ad --output_dir . --name simulation --verbose TRUE
+#R_LIBS=/home/mark/projects/omb/Benchmark-Normalization-Integration-Visualization/Rlibs /usr/local/R/R-4.5.1/bin/Rscript run_vizbench.R --what simulation --flavour scdesign3 --rawdata.ad mouse_pancreas.ad --output_dir . --name simulation --verbose TRUE
+R_LIBS=/home/mark/projects/omb/Benchmark-Normalization-Integration-Visualization/Rlibs /usr/local/R/R-4.5.1/bin/Rscript run_vizbench.R --what normalization --flavour log1pCPM --simdata.ad scdesign3.ad --output_dir . --name normed.ad --verbose TRUE
