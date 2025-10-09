@@ -112,7 +112,7 @@ write_ad <- function(x, file) {
 # write to AnnData via anndataR
 if (args$what %in% c("rawdata", "simulate", "normalize", "integrate")) {
   # here, always writing data files as AD (HDF5)
-  fn <- file.path(args$output_dir, paste0(args$name, ".ad"))
+  fn <- file.path(args$output_dir, paste0(args$name,"_",args$what, ".ad"))
   write_ad(x, fn)
 } else if (args$what == "visualize") {
   # 'x' is something here
