@@ -118,7 +118,13 @@ if (args$what %in% c("rawdata", "simulate", "normalize", "integrate")) {
   # here, always writing data files as AD (HDF5)
   fn <- file.path(args$output_dir, paste0(args$name,"_",args$what, ".ad"))
   write_ad(x, fn)
-} else if (args$what == "visualize") {
+} 
+# write memento about normalization method
+if (args$what == "normalize") {
+  fn <- file.path(args$output_dir, paste0(args$name,"_",args$what, ".json"))
+  write(toJSON(list(normalize=what$flavour)), fn)
+} 
+if (args$what == "visualize") {
   # 'x' is something here
 } else if (args$what == "metric") {
     # 'x' is something here
