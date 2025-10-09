@@ -3,6 +3,7 @@ load_pkgs <- function() {
   library(Seurat)
   library(distances)
   library(dplyr)
+  library(anndataR)
 }
 
 #use_condaenv("Benchmark")
