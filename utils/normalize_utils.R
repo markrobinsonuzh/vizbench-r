@@ -5,33 +5,42 @@ load_pkgs <- function() {
   library(dplyr)
 }
 
-
-
-
-
 #use_condaenv("Benchmark")
 # MR: comment out python for now; TODO: build/integrate reticulate env
 # sc = import("scanpy", convert=F)
 # source_python("utils/normalization.py")
 
-Normalization = function(seurat.obj, NormMethod){
-  seurat.obj = NormMethod(seurat.obj)
-  return(seurat.obj)
-}
+# Normalization = function(seurat.obj, NormMethod){
+#   seurat.obj = NormMethod(seurat.obj)
+#   return(seurat.obj)
+# }
 
+read_seurat <- function(a) read_h5ad(a$rawdata.ad, as = "Seurat")
 
-log1pCP10k = function(seurat.obj){
+# old version
+# log1pCP10k = function(seurat.obj){
+#   print("Running log1pCP10k")
+#   seurat.obj = NormalizeData(seurat.obj,scale.factor = 10^4)
+#   return(seurat.obj)
+# }
+
+# new version
+log1pCP10k = function(args){
   print("Running log1pCP10k")
-  seurat.obj = NormalizeData(seurat.obj,scale.factor = 10^4)
+  seurat.obj <- read_seurat(args)
+  seurat.obj = NormalizeData(seurat.obj,
+                             scale.factor = 10^4)
   return(seurat.obj)
 }
 
-log1pCPM = function(seurat.obj){
+log1pCPM = function(args){
   print("Running log1pCPM")
-  seurat.obj = NormalizeData(seurat.obj,scale.factor= 10^6)
+  seurat.obj = NormalizeData(read_seurat(args),
+                             scale.factor= 10^6)
   return(seurat.obj)
 }
 
+# TODO: rewrite this in native Python
 # `log1pCPMedian` = function(seurat.obj){
 #   print("Running Scanpy default normalization")
 #   counts.layer = Layers(object = seurat.obj, search = "counts")
@@ -55,6 +64,7 @@ log1pCPM = function(seurat.obj){
 #   return(seurat.obj)
 # }
 
+# TODO rework these
 sctransform = function(seurat.obj){
   print("Running sctransform")
   seurat.obj = SCTransform(seurat.obj, vst.flavor = "v2", verbose = FALSE, 
