@@ -16,7 +16,7 @@ load_pkgs <- function() {
 #   return(seurat.obj)
 # }
 
-read_seurat <- function(a) read_h5ad(a$rawdata.ad, as = "Seurat")
+read_seurat <- function(a) read_h5ad(a$simulate.ad, as = "Seurat")
 
 # old version
 # log1pCP10k = function(seurat.obj){
