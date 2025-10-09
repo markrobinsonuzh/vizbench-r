@@ -59,6 +59,10 @@ parser$add_argument('--normalize.ad',
                     type="character",
                     help='gz-compressed H5 file containing (normalized) data as AnnData')
 
+parser$add_argument('--normalize.json',
+                    type="character",
+                    help='JSON file containing name of normalization method')
+
 # parser$add_argument('--data.true_labels',
 #                     type="character",
 #                     help='gz-compressed textfile with the true labels; used to select a range of ks.')
