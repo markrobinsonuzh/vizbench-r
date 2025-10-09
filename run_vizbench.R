@@ -126,7 +126,7 @@ if (args$what %in% c("rawdata", "simulate", "normalize", "integrate")) {
 # write memento about normalization method
 if (args$what == "normalize") {
   fn <- file.path(args$output_dir, paste0(args$name,"_",args$what, ".json"))
-  write(toJSON(list(normalize=what$flavour)), fn)
+  write(toJSON(list(normalize=args$flavour)), fn)
 } 
 if (args$what == "visualize") {
   # 'x' is something here
