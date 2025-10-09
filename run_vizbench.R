@@ -51,9 +51,13 @@ parser$add_argument('--rawdata.ad',
                     type="character",
                     help='gz-compressed H5 file containing (raw) data as AnnData')
 
-parser$add_argument('--simdata.ad',
+parser$add_argument('--simulate.ad',
                     type="character",
                     help='gz-compressed H5 file containing (simulated) data as AnnData')
+
+parser$add_argument('--normalize.ad',
+                    type="character",
+                    help='gz-compressed H5 file containing (normalized) data as AnnData')
 
 # parser$add_argument('--data.true_labels',
 #                     type="character",
