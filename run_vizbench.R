@@ -27,8 +27,8 @@ parser$add_argument("--what",
 parser$add_argument("--flavour", 
                     choices = c("mouse_pancreas",                         # raw data
                                 "scdesign3",                              # simulate
-                                "log1pCP10k", "log1pCPM", "sctransform", # normalize
-                                "x",               # integrate
+                                "log1pCP10k", "log1pCPM", "sctransform",  # normalize
+                                "harmony", "fastMNN",                     # integrate
                                 "y",               # visualize
                                 "xx", "yy", "zz"), # metric
                     required = TRUE, 
