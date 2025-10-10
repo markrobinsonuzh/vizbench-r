@@ -65,6 +65,8 @@ harmony = function(args) {
   features <- rownames(seurat.obj)
   n.pcs <- 50
   if(!(norm_method=="sctransform")){
+    seurat.obj = FindVariableFeatures(seurat.obj, nfeatures = nrow(seurat.obj))
+    seurat.obj <- ScaleData(seurat.obj)
     seurat.obj <- RunPCA(seurat.obj, npcs = n.pcs)
     seurat.obj = IntegrateLayers(
       object = seurat.obj, method = HarmonyIntegration,
@@ -118,6 +120,8 @@ fastMNN = function(args) {
   features <- rownames(seurat.obj)
   n.pcs <- 50
   if(!(norm_method=="sctransform")){
+    seurat.obj = FindVariableFeatures(seurat.obj, nfeatures = nrow(seurat.obj))
+    seurat.obj <- ScaleData(seurat.obj)
     seurat.obj <- RunPCA(seurat.obj, npcs = n.pcs)
     seurat.obj = IntegrateLayers(object = seurat.obj, method = FastMNNIntegration,
                                  new.reduction = 'integrated', verbose = TRUE, 
