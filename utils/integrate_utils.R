@@ -13,7 +13,7 @@ load_pkgs <- function() {
 # accessory functions to read files (from normalize stage)
 read_seurat <- function(a) read_h5ad(a$normalize.ad, as = "Seurat")
 read_normmethod <- function(a) {
-  fromJSON(paste(readLines(a$normalize.json), collapse=""))$method
+  fromJSON(paste(readLines(a$normalize.json), collapse=""))$normalize
 }
 
 
