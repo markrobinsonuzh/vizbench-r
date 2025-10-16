@@ -12,9 +12,10 @@ load_pkgs <- function() {
 
 find_hvgs <- function(seurat.obj, s, nfeatures = 2000) {
   seurat.obj <- seurat.obj[,s]
-  seurat.obj <- FindVariableFeatures(seurat.obj, 
-                              selection.method = "vst", nfeatures = nfeatures)
-  VariableFeatures(fvf)
+  seurat.obj <- FindVariableFeatures(seurat.obj,
+                                     selection.method = "vst", 
+                                     nfeatures = nfeatures)
+  VariableFeatures(seurat.obj)
 }
 
 harmony = function(args, npcs = 20, nfeatures = 2000) {
