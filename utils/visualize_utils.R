@@ -1,6 +1,7 @@
 
 load_pkgs <- function() {
   library(Seurat)
+  reticulate::py_config()
 }
 
 SeuratUMAP = function(args, n.pcs=20, n.cores = 10){
