@@ -29,7 +29,7 @@ parser$add_argument("--flavour",
                                 "scdesign3",                              # simulate
                                 "log1pCP10k", "log1pCPM", "sctransform",  # normalize
                                 "harmony", "fastMNN",                     # integrate
-                                "y",               # visualize
+                                "SeuratUMAP",                             # visualize
                                 "xx", "yy", "zz"), # metric
                     required = TRUE, 
                     help = "Module to run: name depends on the 'what'")
@@ -62,6 +62,11 @@ parser$add_argument('--normalize.ad',
 parser$add_argument('--normalize.json',
                     type="character",
                     help='JSON file containing name of normalization method')
+
+parser$add_argument('--visualize.csv.gz',
+                    type="character",
+                    help='gz-compressed H5 file containing (normalized) data as AnnData')
+
 
 # parser$add_argument('--data.true_labels',
 #                     type="character",
