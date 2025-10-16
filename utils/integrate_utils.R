@@ -10,13 +10,6 @@ load_pkgs <- function() {
   library(rjson)
 }
 
-# accessory functions to read files (from normalize stage)
-read_seurat <- function(a) read_h5ad(a$normalize.ad, as = "Seurat")
-read_normmethod <- function(a) {
-  fromJSON(paste(readLines(a$normalize.json), collapse=""))$normalize
-}
-
-
 # need to make sure this overall logic is reflected in the implemented methods below
 # Integration = function(seurat.obj, IntegrateMethod, n.pcs = 50, features=rownames(seurat.obj), is.sctransform=FALSE){
 #   # if(!(identical(IntegrateMethod, scVI) | identical(IntegrateMethod, LIGERv2) | identical(IntegrateMethod, FastMNN))){
@@ -59,8 +52,8 @@ read_normmethod <- function(a) {
 harmony = function(args) {
   # is.sctransform, n.pcs, features
   print("Running Harmony")
-  norm_method <- read_normmethod(args)
-  seurat.obj <- read_seurat(args)
+  norm_method <- read_normmethod(args$normalize.json)
+  seurat.obj <- read_seurat(args$normalize.ad)
   # TODO: need to expose these params below to benchmarker
   features <- rownames(seurat.obj)
   n.pcs <- 50

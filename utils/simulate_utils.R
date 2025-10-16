@@ -7,13 +7,12 @@ load_pkgs <- function() {
   library(anndataR)
 }
 
-
 ## NOTE: code below uses 40 cores!!
 
 
 scdesign3 <- function(args) {
   
-  sce <- read_h5ad(args$rawdata.ad, as = "SingleCellExperiment")
+  sce <- read_sce(args$rawdata.ad)
   data = counts(sce)
   coldat = colData(sce)
   

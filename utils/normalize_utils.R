@@ -17,13 +17,6 @@ load_pkgs <- function() {
 #   return(seurat.obj)
 # }
 
-read_seurat <- function(a) {
-  so <- read_h5ad(a$simulate.ad, as = "Seurat")
-  # put in layers for batch
-  so[["RNA"]] <- split(so[["RNA"]], f = so$batch)
-  so
-}
-
 # old version
 # log1pCP10k = function(seurat.obj){
 #   print("Running log1pCP10k")
@@ -34,8 +27,7 @@ read_seurat <- function(a) {
 # new version
 log1pCP10k = function(args){
   print("Running log1pCP10k")
-  seurat.obj <- read_seurat(args)
-  seurat.obj[["RNA"]] <- split(seurat.obj[["RNA"]], f = seurat.obj$batch)
+  seurat.obj <- read_seurat(args$simulate.ad)
   seurat.obj = NormalizeData(seurat.obj,
                              scale.factor = 10^4)
   return(seurat.obj)
@@ -43,6 +35,7 @@ log1pCP10k = function(args){
 
 log1pCPM = function(args){
   print("Running log1pCPM")
+  seurat.obj <- read_seurat(args$simulate.ad)
   seurat.obj = NormalizeData(read_seurat(args),
                              scale.factor= 10^6)
   return(seurat.obj)
