@@ -70,6 +70,7 @@ parser$add_argument('--normalize.json',
 
 # send details to be logged
 args <- parser$parse_args()
+message("Full command: ", paste0(commandArgs(), collapse = " "))
 message("Selected category: ", args$what)
 message("Routine selected: ", args$flavour)
 message("Additional parameters: ", args$params)
@@ -131,5 +132,5 @@ if (args$what == "normalize") {
 if (args$what == "visualize") {
   # 'x' is something here
 } else if (args$what == "metric") {
-    # 'x' is something here
+  # 'x' is something here
 }
