@@ -32,7 +32,7 @@ log1pCP10k = function(args){
 log1pCPM = function(args){
   message("Running log1pCPM")
   seurat.obj <- read_seurat(args$simulate.ad)
-  NormalizeData(seurat.object, scale.factor= 10^6)
+  NormalizeData(seurat.obj, scale.factor= 10^6)
 }
 
 # TODO: rewrite this in native Python
