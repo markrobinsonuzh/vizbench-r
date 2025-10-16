@@ -7,7 +7,6 @@ load_pkgs <- function() {
   library(GEOquery)
   library(R.utils)
   library(here)
-  library(anndataR)
 }
 
 mouse_pancreas <- function(args) {

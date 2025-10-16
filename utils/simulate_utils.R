@@ -4,7 +4,6 @@ load_pkgs <- function() {
   library(Seurat)
   library(pbmcapply)
   library(parallel)
-  library(anndataR)
 }
 
 ## NOTE: code below uses 40 cores!!
