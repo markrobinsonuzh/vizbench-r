@@ -63,9 +63,13 @@ parser$add_argument('--normalize.json',
                     type="character",
                     help='JSON file containing name of normalization method')
 
+parser$add_argument('--integrate.ad',
+                    type="character",
+                    help='gz-compressed H5 file containing (integrated) data as AnnData')
+
 parser$add_argument('--visualize.csv.gz',
                     type="character",
-                    help='gz-compressed H5 file containing (normalized) data as AnnData')
+                    help='gz-compressed CSV file containing embeddings')
 
 
 # parser$add_argument('--data.true_labels',
