@@ -119,6 +119,8 @@ fastMNN = function(args) {
   # TODO: need to expose these params below to benchmarker
   features <- rownames(seurat.obj)
   n.pcs <- 50
+  # put in layers for batch
+  seurat.obj[["RNA"]] <- split(seurat.obj[["RNA"]], f = seurat.obj$batch)
   if(!(norm_method=="sctransform")){
     seurat.obj = FindVariableFeatures(seurat.obj, nfeatures = nrow(seurat.obj))
     seurat.obj <- ScaleData(seurat.obj)
