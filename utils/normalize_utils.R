@@ -25,24 +25,14 @@ load_pkgs <- function() {
 # new version
 log1pCP10k = function(args){
   message("Running log1pCP10k")
-  message(args$simulate.ad)
-  message(class(args$simulate.ad))
   seurat.obj <- read_seurat(args$simulate.ad)
-  seurat.obj = NormalizeData(seurat.obj,
-                             scale.factor = 10^4)
-  message("Done.")
-  return(seurat.obj)
+  NormalizeData(seurat.obj, scale.factor = 10^4)
 }
 
 log1pCPM = function(args){
   message("Running log1pCPM")
-  message(args$simulate.ad)
-  message(class(args$simulate.ad))
   seurat.obj <- read_seurat(args$simulate.ad)
-  seurat.obj = NormalizeData(read_seurat(args),
-                             scale.factor= 10^6)
-  message("Done.")
-  return(seurat.obj)
+  NormalizeData(seurat.object, scale.factor= 10^6)
 }
 
 # TODO: rewrite this in native Python
