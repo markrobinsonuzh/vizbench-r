@@ -132,7 +132,10 @@ if (args$what == "normalize") {
   write(toJSON(list(normalize=args$flavour)), fn)
 } 
 if (args$what == "visualize") {
-  # 'x' is something here
+  # here, write embeddings to gzipped CSV file
+  fn <- gzfile(file.path(args$output_dir, 
+                         paste0(args$name,"_",args$what, ".csv.gz")))
+  write_csv(x, file = fn)
 } else if (args$what == "metric") {
   # 'x' is something here
 }

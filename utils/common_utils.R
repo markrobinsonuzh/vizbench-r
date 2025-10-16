@@ -2,6 +2,7 @@
 suppressPackageStartupMessages({
   library(anndataR)
   library(rjson)
+  library(readr)
 })
 
 read_sce <- function(f) read_h5ad(f, as = "SingleCellExperiment")
