@@ -35,6 +35,8 @@ log1pCP10k = function(args){
 
 log1pCPM = function(args){
   message("Running log1pCPM")
+  message(paste0(names(args), collapse=" "))
+  message(args$simulate.ad)
   seurat.obj <- read_seurat(args$simulate.ad)
   seurat.obj = NormalizeData(read_seurat(args),
                              scale.factor= 10^6)
