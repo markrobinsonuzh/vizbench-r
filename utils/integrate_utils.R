@@ -54,32 +54,43 @@ harmony = function(args) {
   print("Running Harmony")
   norm_method <- read_normmethod(args$normalize.json)
   seurat.obj <- read_seurat(args$normalize.ad)
-  # TODO: need to expose these params below to benchmarker
-  features <- rownames(seurat.obj)
-  n.pcs <- 50
-  if(!(norm_method=="sctransform")){
-    seurat.obj = FindVariableFeatures(seurat.obj, nfeatures = nrow(seurat.obj))
-    seurat.obj <- ScaleData(seurat.obj)
-    seurat.obj <- RunPCA(seurat.obj, npcs = n.pcs)
-    seurat.obj = IntegrateLayers(
-      object = seurat.obj, method = HarmonyIntegration,
-      orig.reduction = "pca", new.reduction = "integrated",
-      verbose = TRUE,
-      npcs = n.pcs,
-      features = features
-    )
-  }else{
-    seurat.obj = IntegrateLayers(
-      object = seurat.obj, method = HarmonyIntegration,
-      normalization.method = "SCT",
-      orig.reduction = "pca", new.reduction = "integrated",
-      verbose = TRUE,
-      npcs = n.pcs,
-      features = features
-    )
-  }
+  seurat.obj = RunHarmony(seurat.obj, "batch",
+                          reduction.save = "integrated")
   return(seurat.obj)
 }
+
+
+# harmony = function(args) {
+#   # is.sctransform, n.pcs, features
+#   print("Running Harmony")
+#   norm_method <- read_normmethod(args$normalize.json)
+#   seurat.obj <- read_seurat(args$normalize.ad)
+#   # TODO: need to expose these params below to benchmarker
+#   features <- rownames(seurat.obj)
+#   n.pcs <- 50
+#   if(!(norm_method=="sctransform")){
+#     seurat.obj = FindVariableFeatures(seurat.obj, nfeatures = nrow(seurat.obj))
+#     seurat.obj <- ScaleData(seurat.obj)
+#     seurat.obj <- RunPCA(seurat.obj, npcs = n.pcs)
+#     seurat.obj = IntegrateLayers(
+#       object = seurat.obj, method = HarmonyIntegration,
+#       orig.reduction = "pca", new.reduction = "integrated",
+#       verbose = TRUE,
+#       npcs = n.pcs,
+#       features = features
+#     )
+#   }else{
+#     seurat.obj = IntegrateLayers(
+#       object = seurat.obj, method = HarmonyIntegration,
+#       normalization.method = "SCT",
+#       orig.reduction = "pca", new.reduction = "integrated",
+#       verbose = TRUE,
+#       npcs = n.pcs,
+#       features = features
+#     )
+#   }
+#   return(seurat.obj)
+# }
 
 
 # `Seurat-RPCA` = function(seurat.obj, is.sctransform, n.pcs, features){
