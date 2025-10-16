@@ -86,7 +86,17 @@ message("libPaths: ", paste0(.libPaths(),collapse=";"))
 info <- Sys.info()
 message("info: ", paste0(names(info),"=",info,collapse=";"))
 
-# source helper functions (n.b.: args$what controls which code to source)
+# source common helper functions
+helpers <- file.path(run_dir, "utils", "common_utils.R")
+if( file.exists(helpers) ) {
+  message("Sourcing .. ", helpers)
+  source(helpers)
+} else {
+  message(paste0("Helper code in ",helpers," not found. Exiting."))
+  quit("no", status = 1)
+}
+
+# source stage-specific helper functions (n.b.: according to args$what)
 helpers <- file.path(run_dir, "utils", paste0(args$what, "_utils.R"))
 if( file.exists(helpers) ) {
     message("Sourcing .. ", helpers)
@@ -108,14 +118,6 @@ if ( !("error" %in% class(fun)) ) {
 } else {
     message('Unimplemented functionality. Exiting.\n') # throw error?
     quit("no", status = 1)
-}
-
-write_ad <- function(x, file) {
-  if(args$verbose) message(paste("Converting", class(x), "-> AnnData."))
-  x.ad <- as_AnnData(x)
-  if(args$verbose) message(paste0("Writing: ", file, "."))
-  write_h5ad(x.ad, fn, mode = "w", compression = "gzip")
-  if(args$verbose) message("Done.")
 }
 
 # write to AnnData via anndataR
