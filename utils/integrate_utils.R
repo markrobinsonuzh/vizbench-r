@@ -10,6 +10,31 @@ load_pkgs <- function() {
   library(rjson)
 }
 
+find_hvgs <- function(seurat.obj, s, nfeatures = 2000) {
+  seurat.obj <- seurat.obj[,s]
+  seurat.obj <- FindVariableFeatures(seurat.obj, 
+                              selection.method = "vst", nfeatures = nfeatures)
+  VariableFeatures(fvf)
+}
+
+harmony = function(args, npcs = 20, nfeatures = 2000) {
+  # parameters 'npcs' and 'nfeatures' are implemented here,
+  # but so far not in the orchestrator
+  message("Running Harmony")
+  # norm_method <- read_normmethod(args$normalize.json)
+  so <- read_seurat(args$normalize.ad)
+  
+  rns <- split(row.names(so@meta.data), so@meta.data$batch)
+  hvgs <- lapply(rns, function(u) find_hvgs(so, u, nfeatures = nfeatures))
+  VariableFeatures(so) <- unique( unlist(hvgs) )
+  
+  so <- ScaleData(so)
+  so <- RunPCA(so, features = VariableFeatures(so), npcs = npcs)
+  
+  RunHarmony(so, "batch", reduction.save = "integrated")
+}
+
+
 # need to make sure this overall logic is reflected in the implemented methods below
 # Integration = function(seurat.obj, IntegrateMethod, n.pcs = 50, features=rownames(seurat.obj), is.sctransform=FALSE){
 #   # if(!(identical(IntegrateMethod, scVI) | identical(IntegrateMethod, LIGERv2) | identical(IntegrateMethod, FastMNN))){
@@ -48,16 +73,6 @@ load_pkgs <- function() {
 #   }
 #   return(seurat.obj)
 # }
-
-harmony = function(args) {
-  # is.sctransform, n.pcs, features
-  print("Running Harmony")
-  norm_method <- read_normmethod(args$normalize.json)
-  seurat.obj <- read_seurat(args$normalize.ad)
-  seurat.obj = RunHarmony(seurat.obj, "batch",
-                          reduction.save = "integrated")
-  return(seurat.obj)
-}
 
 
 # harmony = function(args) {
