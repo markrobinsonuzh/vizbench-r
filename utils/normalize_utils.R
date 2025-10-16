@@ -25,6 +25,8 @@ load_pkgs <- function() {
 # new version
 log1pCP10k = function(args){
   message("Running log1pCP10k")
+  message(paste0(names(args), collapse=" "))
+  message(args$simulate.ad)
   seurat.obj <- read_seurat(args$simulate.ad)
   seurat.obj = NormalizeData(seurat.obj,
                              scale.factor = 10^4)
