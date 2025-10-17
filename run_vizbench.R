@@ -144,7 +144,7 @@ if (args$what == "visualize") {
   # here, write embeddings to gzipped CSV file
   fn <- gzfile(file.path(args$output_dir, 
                          paste0(args$name,"_",args$what, ".csv.gz")))
-  write_csv(x, file = fn)
+  write_csv(as.data.frame(x), file = fn)
 } else if (args$what == "metric") {
   # 'x' is something here
 }
