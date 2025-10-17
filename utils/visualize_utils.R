@@ -1,11 +1,11 @@
 
 load_pkgs <- function() {
   library(Seurat)
-  reticulate::py_config()
 }
 
 SeuratUMAP = function(args, n.pcs=20, n.cores = 10){
   message("Running SeuratUMAP")
+  message(reticulate::py_config())
   seurat.obj <- read_seurat(args$integrate.ad)
   seurat.obj = RunUMAP(seurat.obj, dims = 1:n.pcs, 
                        reduction="integrated",
