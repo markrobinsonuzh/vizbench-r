@@ -5,7 +5,7 @@ load_pkgs <- function() {
 
 SeuratUMAP = function(args, n.pcs=20, n.cores = 10){
   message("Running SeuratUMAP")
-  message(reticulate::py_available(initialize = TRUE))
+  message(try(reticulate::use_python("/root/.virtualenvs/r-reticulate/bin/python")))
   z <- reticulate::py_config()
   message(z$python)
   message(z$pythonhome)
