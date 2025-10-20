@@ -37,6 +37,7 @@ celltype_shape = function(args) {
 
 
 batch_mixture <- function(args, seed=42, n.cores = 5, B = 100, n = 10000){
+  set.seed(seed)
   
   # read embeddings
   data <- read_csv(args$visualize.csv.gz)
@@ -46,8 +47,6 @@ batch_mixture <- function(args, seed=42, n.cores = 5, B = 100, n = 10000){
   celltype <- sce$celltype
   rm(sce)
   
-  set.seed(seed)
-  n <- nrow(sce)
   # importing this logic below from original Metric_eval()
   if(nrow(data)<100000){
     B = 1
