@@ -36,7 +36,7 @@ celltype_shape = function(args) {
 }
 
 
-batch_mixture <- function(args, seed=42, n.cores = 10){
+batch_mixture <- function(args, seed=42, n.cores = 5, B = 100, n = 10000){
   
   # read embeddings
   data <- read_csv(args$visualize.csv.gz)
@@ -48,8 +48,11 @@ batch_mixture <- function(args, seed=42, n.cores = 10){
   
   set.seed(seed)
   n <- nrow(sce)
-  if(n < 100000) { B <- 1 } else { B <- 100 }
-  if(B == 1) n.cores <- 1
+  # importing this logic below from original Metric_eval()
+  if(nrow(data)<100000){
+    B = 1
+    n = nrow(data)
+  }
 
   val = mclapply(1:B, FUN=function(i){
     id = sample(1:nrow(data), n, replace = FALSE)
