@@ -8,6 +8,51 @@ load_pkgs <- function() {
 
 ## NOTE: code below uses 40 cores!!
 
+# later (at metric calculation, we'll need some parameters)
+# instead of recomputing, this should be calculated at simulation time and read here.
+# for(data in Dataset){
+#     simulation = readRDS(file.path(data_dir,"Data/Simulation",
+#                                    data,paste0(dataset_name, "_simulation.rds")))
+#     para = readRDS(file.path(data_dir,"Data/Simulation",
+#                              data,paste0(dataset_name, "_para.rds")))
+#     celltype = simulation$meta$celltype
+#     batch = simulation$meta$batch
+#     ls = log10(colSums(simulation$counts))
+#     zp <- colMeans(simulation$counts==0)
+#     rm(simulation)
+#     idx = lapply(unique(batch), function(b) tapply(which(batch==b), celltype[batch==b], function(id) id[1]))
+#     names(idx) = unique(batch)
+#     mean_par = lapply(idx, function(idx) para$mean_mat[idx,])
+#     mean_par = lapply(mean_par, function(obj) {rownames(obj) = names(idx[[1]]); obj})
+#     
+#     variance_par = lapply(idx, function(idx)  para$mean_mat[idx,]^2 * para$sigma_mat[idx,])
+#     variance_par = lapply(variance_par, function(obj) {rownames(obj) = names(idx[[1]]); obj})
+#     
+#     rm(para)
+#     for(norm in Normalization){
+#       for(integ in Integration){
+#         for(visual in Visualization){
+#           res = try(readRDS(paste0(path_visualization_results,"/",data,"_",norm,"+",integ,"+",visual,".rds")))
+#           for(met in Metric){
+#             if(!inherits(res, "try-error")){
+#               val = Metric_eval(data =res, 
+#                                 mean_par = mean_par, variance_par = variance_par,
+#                                 library_size = ls, zero_proportion = zp,
+#                                 celltype = celltype, batch = batch,
+#                                 metric = met, n.cores = 20) 
+#               metric_df[k, ] = c(data, norm, integ, visual, met, val)
+#             }else{
+#               metric_df[k, ] = c(data, norm, integ, visual, met, NA)
+#             }
+#             print(k)
+#             saveRDS(metric_df,paste0(path_save_evaluation,"/",data,"_evaluation_metrics.rds"))
+#             k=k+1
+#           }
+#         }
+#       }
+#     }
+#   }
+
 
 scdesign3 <- function(args) {
   

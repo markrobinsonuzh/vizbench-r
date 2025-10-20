@@ -147,4 +147,6 @@ if (args$what == "visualize") {
   write_csv(as.data.frame(x), file = fn)
 } else if (args$what == "metric") {
   # 'x' is something here
+  fn <- file.path(args$output_dir, paste0(args$name,"_",args$what, ".json"))
+  write(toJSON(list(value=x)), fn)
 }
