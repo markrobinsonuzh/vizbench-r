@@ -360,29 +360,3 @@ batch_mixture <- function(args, seed=42, n.cores = 5, B = 100, n = 10000){
 #   return(mean(val,na.rm=T))
 # }
 
-batch_mixture <- function(data, celltype, batch, seed=42, B, n, n.cores){
-  set.seed(seed)
-  if(B == 1){
-    n.cores=1
-  }
-  val = mclapply(1:B, FUN=function(i){
-    id = sample(1:nrow(data), n, replace = F)
-    res = mean(sapply(unique(celltype[id]), function(c){
-      ids = id[celltype[id]==c]
-      if(length(unique(batch[ids]))>1){
-        per = min(round(table(batch[ids])/2),30)
-        lisi_res  = compute_lisi(data[ids,], data.frame(batch=batch[ids]), "batch", perplexity = per)
-        return(mean(lisi_res$batch))
-      }else{
-        return(NA)
-      }
-    }
-    ),na.rm=T)
-    return(res)
-  },mc.cores = n.cores)
-  val = unlist(val)
-  
-  return(mean(val,na.rm=T))
-}
-
-
