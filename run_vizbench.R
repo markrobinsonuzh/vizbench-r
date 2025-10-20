@@ -22,7 +22,7 @@ parser$add_argument("--what",
 
 #s <- switch(args$what, rawdata = c("mouse_pancreas"),
 #                       simulation = c("scdesign3"))
-# TODO: add subparser
+# TODO: add subparser?
 
 parser$add_argument("--flavour", 
                     choices = c("mouse_pancreas",                         # raw data
@@ -30,7 +30,7 @@ parser$add_argument("--flavour",
                                 "log1pCP10k", "log1pCPM", "sctransform",  # normalize
                                 "harmony", "fastMNN",                     # integrate
                                 "SeuratUMAP",                             # visualize
-                                "xx", "yy", "zz"), # metric
+                                "celltype_shape","batch_mixture"),        # metrics
                     required = TRUE, 
                     help = "Module to run: name depends on the 'what'")
 
